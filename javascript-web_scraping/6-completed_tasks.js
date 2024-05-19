@@ -8,7 +8,7 @@ request(url, function (error, response, body) {
     console.error(error);
     return;
   }
-  
+
   const todos = JSON.parse(body);
   const completedTasks = todos.reduce((acc, todo) => {
     if (todo.completed) {
