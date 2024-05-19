@@ -1,23 +1,23 @@
 #!/usr/bin/node
 const request = require('request');
+const starWarsUri = process.argv[2];
+let times = 0;
 
-const apiUrl = process.argv[2];
+request(starWarsUri, function (_err, _res, body) {
+  body = JSON.parse(body).results;
 
-request(apiUrl, function (error, response, body) {
-  if (error) {
-    console.error(error);
-    return;
+  for (let i = 0; i < body.length; ++i) {
+    const characters = body[i].characters;
+
+    for (let j = 0; j < characters.length; ++j) {
+      const character = characters[j];
+      const characterId = character.split('/')[5];
+
+      if (characterId === '18') {
+        times += 1;
+      }
+    }
   }
 
-  const films = JSON.parse(body).results;
-  const characterId = '18'; // Character ID for "Wedge Antilles"
-  let count = 0;
-
-  films.forEach(film => {
-    if (film.characters.includes(`https://swapi-api.hbtn.io/api/people/${characterId}/`)) {
-      count++;
-    }
-  });
-
-  console.log(count);
+  console.log(times);
 });
